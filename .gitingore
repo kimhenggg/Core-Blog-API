@@ -1,0 +1,37 @@
+﻿# Build folders
+bin/
+obj/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+
+# Rider / IntelliJ
+.idea/
+
+# Visual Studio Code
+.vscode/
+
+# Visual Studio
+.vs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment files
+.env
+
+# NuGet packages
+*.nupkg
+
+# Publish folder
+publish/
+
+# ASP.NET temp files
+*.tmp
+*.temp
