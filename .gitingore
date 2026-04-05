@@ -1,37 +1,40 @@
-﻿# Build folders
-bin/
-obj/
-
-# User-specific files
-*.user
-*.rsuser
-*.suo
-
-# Rider / IntelliJ
-.idea/
-
-# Visual Studio Code
-.vscode/
-
-# Visual Studio
-.vs/
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
-
-# Environment files
-.env
-
-# NuGet packages
-*.nupkg
-
-# Publish folder
+﻿# Build output
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
 publish/
 
-# ASP.NET temp files
+# Secrets — never push
+appsettings.Development.json
+appsettings.*.json
+*.pfx
+*.p12
+.env
+secrets.json
+
+# Visual Studio / Rider
+.vs/
+*.user
+*.suo
+.idea/
+*.DotSettings.user
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
+
+# Test results
+TestResults/
+coverage.json
+*.trx
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs & temp
+*.log
 *.tmp
-*.temp
+*.cache

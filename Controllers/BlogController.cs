@@ -8,35 +8,45 @@ namespace BlogApi.Controllers
     [Route("api/[controller]")]
     public class BlogController : ControllerBase
     {
-        private readonly BlogService _service = new BlogService();
+        private readonly BlogService _service;
+
+        // inject via constructor, never use "new"
+        public BlogController(BlogService service)
+        {
+            _service = service;
+        }
 
         [HttpGet]
-        public IActionResult GetBlog()
+        public async Task<IActionResult> GetBlogs()
         {
-            return Ok(_service.GetBlogs());
+            return Ok(await _service.GetBlogs());
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetResult(int id)
+        public async Task<IActionResult> GetBlog(string id)  // string not int
         {
-            var blog = _service.GetBlog(id);
+            var blog = await _service.GetBlog(id);
             if (blog == null)
                 return NotFound();
-            
+
             return Ok(blog);
         }
 
         [HttpPost]
-        public IActionResult CreateBlog(Blog blog)
+        public async Task<IActionResult> CreateBlog(Blog blog)
         {
-            _service.CreateBlog(blog);
-            return Ok(blog); 
+            await _service.CreateBlog(blog);
+            return CreatedAtAction(nameof(GetBlog), new { id = blog.Id }, blog); // 201 not 200
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteBlog(int id)
+        public async Task<IActionResult> DeleteBlog(string id)  // string not int
         {
-            _service.DeleteBlog(id);
+            var blog = await _service.GetBlog(id);
+            if (blog == null)
+                return NotFound();  // return 404 if not found
+
+            await _service.DeleteBlog(id);
             return NoContent();
         }
     }

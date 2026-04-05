@@ -1,40 +1,28 @@
-﻿using BlogApi.Data;
-using BlogApi.Models;
+﻿using BlogApi.Models;
+using MongoDB.Driver;
 
 namespace BlogApi.Services
 {
     public class BlogService
     {
-        private readonly BlogRepository _repo;
+        private readonly IMongoCollection<Blog> _blogs; // Blog, not BlogRepository
 
-        public BlogService() // method
+        public BlogService(IMongoClient client, IConfiguration config)
         {
-            _repo = new BlogRepository();
+            var db = client.GetDatabase(config["MongoDB:DatabaseName"]);
+            _blogs = db.GetCollection<Blog>("blogs");
         }
 
-        public List<Blog> GetBlogs()
-        {
-            return _repo.GetAll();
-        }
+        public async Task<List<Blog>> GetBlogs() =>
+            await _blogs.Find(_ => true).ToListAsync();
 
-        public Blog GetBlog(int id)
-        {
-            return _repo.GetById(id);
-        }
+        public async Task<Blog?> GetBlog(string id) =>  // string not int
+            await _blogs.Find(b => b.Id == id).FirstOrDefaultAsync();
 
-        public void CreateBlog(Blog blog)
-        {
-            _repo.Add(blog);
-        }
+        public async Task CreateBlog(Blog blog) =>
+            await _blogs.InsertOneAsync(blog);
 
-        public void DeleteBlog(int id)
-        {
-            var blog = _repo.GetById(id);
-            if (blog !=null)
-            {
-                _repo.Delete(blog);
-            }
-        }
+        public async Task DeleteBlog(string id) =>  // no need to fetch first
+            await _blogs.DeleteOneAsync(b => b.Id == id);
     }
 }
-
